@@ -1,0 +1,41 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+	<!-- Connection Factory -->
+	<bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+		<!-- brokerURL = protocol://host:port, in this example we are using vm 
+			protocol so it uses in memory amq broker, generally this is useful in junits, 
+			61616 is default port of amq broker -->
+		<constructor-arg name="brokerURL" value="vm://localhost:61616" />
+	</bean>
+
+	<!-- Queue -->
+	<bean id="testQueue" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="${myApp.jms.inbound.queue.name}" />
+	</bean>
+
+	<!-- JMS Template -->
+	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="defaultDestination" ref="testQueue" />
+	</bean>
+
+	<!-- Message Sender -->
+	<bean id="jmsSender" class="com.ravi.spring.jms.JMSSender">
+		<constructor-arg name="jmsTemplate" ref="jmsTemplate" />
+	</bean>
+
+	<!-- Message Listener -->
+	<bean id="jmsListener" class="com.ravi.spring.jms.JMSListener" />
+
+	<!-- Message Listener Container -->
+	<bean id="defaultMessageListenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="messageListener" ref="jmsListener" />
+		<property name="destination" ref="testQueue" />        <!-- queue from  which message listener will consume messages -->
+		<property name="concurrency" value="1-5" />            <!-- minListenerThreads-maxListenerThreads -->
+		<property name="sessionTransacted" value="true" />
+	</bean>
+</beans>
