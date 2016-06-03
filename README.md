@@ -1,0 +1,2 @@
+# SimpleJMS
+Spring ApacheMQ maven
