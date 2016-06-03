@@ -6,7 +6,6 @@ package com.ravi.spring.jms;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
- * @author vibhor
  *
  */
 public class JMSApp {

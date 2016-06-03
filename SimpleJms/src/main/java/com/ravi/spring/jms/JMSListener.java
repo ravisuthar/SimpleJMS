@@ -11,7 +11,6 @@ import javax.jms.TextMessage;
 import org.springframework.jms.listener.SessionAwareMessageListener;
 
 /**
- * @author vibhor
  */
 public class JMSListener implements SessionAwareMessageListener<Message> {
 

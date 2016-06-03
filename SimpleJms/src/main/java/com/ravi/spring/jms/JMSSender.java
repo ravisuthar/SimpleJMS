@@ -12,7 +12,6 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 
 /**
- * @author vibhor
  *
  *         this class uses JmsTemplate to send messages to destination
  */
